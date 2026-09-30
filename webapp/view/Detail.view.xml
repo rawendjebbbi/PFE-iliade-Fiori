@@ -1,0 +1,205 @@
+<mvc:View xmlns:form="sap.ui.layout.form"
+    controllerName="project2.controller.Detail"
+    xmlns:mvc="sap.ui.core.mvc"
+    xmlns="sap.m"
+    xmlns:core="sap.ui.core"
+    displayBlock="true">
+
+    <Page
+        id="detailPage"
+        title="Détail Ordre de Calcul"
+        showNavButton="true"
+        navButtonPress=".onNavBack"
+        busy="{detailModel>/busy}"
+        busyIndicatorDelay="0">
+
+        <content>
+
+            <!-- ═══════ PANEL STATUT ═══════ -->
+            <Panel id="_IDGenPanel1"
+                class="sapUiResponsiveMargin"
+                width="auto">
+                <content>
+                    <HBox id="hboxStatut"
+                        alignItems="Center"
+                        justifyContent="SpaceBetween"
+                        class="sapUiSmallMargin sapUiSmallMarginBottom">
+                        <ObjectStatus
+                            id="_IDGenObjectStatus"
+                            text="{path: 'Trigstat', formatter: '.formatStatutText'}"
+                            state="{path: 'Trigstat', formatter: '.formatStatutState'}"
+                            icon="{path: 'Trigstat', formatter: '.formatStatutIcon'}"
+                            inverted="true" />
+                        <!-- Bouton Créer le document directement dans la bannière statut -->
+                        <Button
+                            id="btnTraiterTop"
+                            text="Reprise Facturation"
+                            icon="sap-icon://add-document"
+                            type="Accept"
+                            press=".onCreerDocument"
+                            enabled="{= ${Trigstat} === '2' }" />
+                    </HBox>
+                    <MessageStrip
+                        id="_IDGenMessageStrip1"
+                        text="{path: 'Trigstat', formatter: '.formatStatutMessage'}"
+                        type="{path: 'Trigstat', formatter: '.formatStatutMessageType'}"
+                        showIcon="true"
+                        showCloseButton="false"
+                        class="sapUiSmallMarginBegin sapUiSmallMarginEnd sapUiSmallMarginBottom" />
+                </content>
+            </Panel>
+
+            <!-- ═══════ PANEL INFORMATIONS + DATES côte à côte ═══════ -->
+            <Panel id="panelMain"
+                class="sapUiResponsiveMargin"
+                width="auto">
+                <content>
+                    <!-- Deux colonnes : Informations | Dates -->
+                    <HBox id="hboxMainContent"
+                        wrap="Wrap"
+                        fitContainer="true">
+
+                        <!-- ── Colonne INFORMATIONS ── -->
+                        <VBox id="vboxInfos"
+                            class="sapUiSmallMarginEnd"
+                            width="50%">
+                            <Title id="titleInfos"
+                                text="Informations"
+                                level="H3"
+                                class="sapUiSmallMargin" />
+                            <form:SimpleForm
+                                id="formGeneral"
+                                editable="false"
+                                layout="ResponsiveGridLayout"
+                                labelSpanXL="5"
+                                labelSpanL="5"
+                                labelSpanM="5"
+                                labelSpanS="12"
+                                columnsXL="1"
+                                columnsL="1"
+                                columnsM="1"
+                                class="sapUiSmallMarginBegin sapUiSmallMarginEnd sapUiTinyMarginBottom">
+
+                                <form:title>
+                                    <core:Title id="_IDGenTitle1" text="" />
+                                </form:title>
+
+                                <Label id="_IDGenLabel3" text="Installation" design="Bold" />
+                                <HBox id="hboxAnlage" alignItems="Center">
+                                    <core:Icon id="_IDGenIcon1" src="sap-icon://factory" color="#5a6872" class="sapUiSmallMarginEnd" />
+                                    <ObjectIdentifier id="_IDGenObjIdAnlage" title="{Anlage}" />
+                                </HBox>
+
+                                <Label id="_IDGenLabel4" text="Compte Contrat" />
+                                <HBox id="hboxVkonto" alignItems="Center">
+                                    <core:Icon id="_IDGenIcon2" src="sap-icon://account" color="#5a6872" class="sapUiSmallMarginEnd" />
+                                    <Text id="_IDGenText4" text="{Vkonto}" emptyIndicatorMode="On" />
+                                </HBox>
+
+                                <Label id="_IDGenLabel5" text="Société" />
+                                <HBox id="hboxBukrs" alignItems="Center">
+                                    <core:Icon id="_IDGenIcon3" src="sap-icon://building" color="#5a6872" class="sapUiSmallMarginEnd" />
+                                    <Text id="_IDGenText5" text="{Bukrs}" emptyIndicatorMode="On" />
+                                </HBox>
+
+                                <Label id="_IDGenLabel6" text="Sect. Activité" />
+                                <HBox id="hboxSparte" alignItems="Center">
+                                    <core:Icon id="_IDGenIcon4" src="sap-icon://business-objects-experience" color="#5a6872" class="sapUiSmallMarginEnd" />
+                                    <Text id="_IDGenText6" text="{path: 'Sparte', formatter: '.formatSparte'}" emptyIndicatorMode="On" />
+                                </HBox>
+
+                                <Label id="_IDGenLabel7" text="Portion" />
+                                <HBox id="hboxPortion" alignItems="Center">
+                                    <core:Icon id="_IDGenIcon5" src="sap-icon://pie-chart" color="#5a6872" class="sapUiSmallMarginEnd" />
+                                    <Text id="_IDGenText7" text="{Portion}" emptyIndicatorMode="On" />
+                                </HBox>
+
+                                <Label id="_IDGenLabel8" text="Unité Relevé" />
+                                <HBox id="hboxAbleinh" alignItems="Center">
+                                    <core:Icon id="_IDGenIcon6" src="sap-icon://measure" color="#5a6872" class="sapUiSmallMarginEnd" />
+                                    <Text id="_IDGenText8" text="{Ableinh}" emptyIndicatorMode="On" />
+                                </HBox>
+
+                            </form:SimpleForm>
+                        </VBox>
+
+                        <!-- Séparateur vertical -->
+                        <core:HTML id="verticalSep"
+                            content="&lt;div style='width:1px; background:#e5e5e5; margin:8px 0 8px 0; min-height:180px;'&gt;&lt;/div&gt;" />
+
+                        <!-- ── Colonne DATES ── -->
+                        <VBox id="vboxDates"
+                            class="sapUiSmallMarginBegin"
+                            width="45%">
+                            <Title id="titleDates"
+                                text="Dates"
+                                level="H3"
+                                class="sapUiSmallMargin" />
+                            <form:SimpleForm
+                                id="formDates"
+                                editable="false"
+                                layout="ResponsiveGridLayout"
+                                labelSpanXL="6"
+                                labelSpanL="6"
+                                labelSpanM="6"
+                                labelSpanS="12"
+                                columnsXL="1"
+                                columnsL="1"
+                                columnsM="1"
+                                class="sapUiSmallMarginBegin sapUiSmallMarginEnd sapUiTinyMarginBottom">
+
+                                <form:title>
+                                    <core:Title id="_IDGenTitle2" text="" />
+                                </form:title>
+
+                                <Label id="_IDGenLabel2" text="Date Création" />
+                                <HBox id="hboxErdat" alignItems="Center">
+                                    <core:Icon id="_IDGenIcon7" src="sap-icon://appointment-2" color="#5a6872" class="sapUiSmallMarginEnd" />
+                                    <Text id="_IDGenText2" text="{path: 'Erdat', formatter: '.formatDate'}" />
+                                </HBox>
+
+                                <Label id="_IDGenLabel1" text="Date Relève Plan." />
+                                <HBox id="hboxAdatsoll" alignItems="Center">
+                                    <core:Icon id="_IDGenIcon8" src="sap-icon://calendar" color="#5a6872" class="sapUiSmallMarginEnd" />
+                                    <Text id="_IDGenText1" text="{path: 'Adatsoll', formatter: '.formatDate'}" />
+                                </HBox>
+
+                                <Label id="_IDGenLabel" text="DteCalcFactPlan" />
+                                <HBox id="hboxAbrdats" alignItems="Center">
+                                    <core:Icon id="_IDGenIcon9" src="sap-icon://initiative" color="#5a6872" class="sapUiSmallMarginEnd" />
+                                    <Text id="_IDGenText" text="{path: 'Abrdats', formatter: '.formatDate'}" />
+                                </HBox>
+
+                            </form:SimpleForm>
+                        </VBox>
+
+                    </HBox>
+                </content>
+            </Panel>
+
+        </content>
+
+        <!-- ═══════ FOOTER STICKY ═══════ -->
+        <footer>
+            <OverflowToolbar id="footerToolbar">
+                <ToolbarSpacer id="_IDGenToolbarSpacer2" />
+                <Button
+                    id="btnTraiter"
+                    text="Reprise Facturation"
+                    icon="sap-icon://add-document"
+                    type="Accept"
+                    press=".onCreerDocument"
+                    enabled="{= ${Trigstat} === '2' }"
+                    class="sapUiSmallMarginEnd" />
+                <Button
+                    id="btnRetour"
+                    text="Retour"
+                    icon="sap-icon://nav-back"
+                    press=".onNavBack"
+                    type="Default" />
+            </OverflowToolbar>
+        </footer>
+
+    </Page>
+
+</mvc:View>

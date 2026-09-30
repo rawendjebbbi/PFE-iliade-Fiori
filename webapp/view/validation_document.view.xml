@@ -1,0 +1,359 @@
+<mvc:View
+    controllerName="project2.controller.validation_document"
+    xmlns:mvc="sap.ui.core.mvc"
+    xmlns="sap.m"
+    xmlns:f="sap.ui.layout.form"
+    xmlns:core="sap.ui.core"
+    displayBlock="true">
+
+    <Page
+        id="pageMain"
+        title="Liste des docmts de fact. et de calc. de fact. mis en attnte pr vérif."
+        showNavButton="true"
+        navButtonPress=".onNavBack"
+        busy="{viewModel>/busy}"
+        busyIndicatorDelay="0">
+
+        <subHeader>
+            <Bar id="actionBar">
+                <contentLeft>
+                    <Button id="btnLiberer"
+                        text="Libérer document"
+                        icon="sap-icon://accept"
+                        type="Accept"
+                        press=".onLibererDocument"
+                        enabled="{= ${viewModel>/selectedCount} > 0 }"
+                        visible="{= !!${viewModel>/activeMode} }" />
+
+                    <ObjectStatus id="badgeMode"
+                        text="{path: 'viewModel>/activeMode', formatter: '.formatModeText'}"
+                        icon="{= ${viewModel>/activeMode} === 'facturation' ? 'sap-icon://invoice' : 'sap-icon://document-text' }"
+                        state="{= ${viewModel>/activeMode} === 'facturation' ? 'Information' : 'Success' }"
+                        visible="{= !!${viewModel>/activeMode} }"
+                        class="sapUiSmallMarginBegin" />
+
+                    <Button id="btnAnnulerSel"
+                        text="{= ${viewModel>/selectedCount} + ' sélectionné(s) — Annuler'}"
+                        icon="sap-icon://decline"
+                        type="Transparent"
+                        press=".onCancelSelection"
+                        visible="{= ${viewModel>/selectedCount} > 0 }" />
+                </contentLeft>
+                <contentRight>
+                    <Button id="btnRefresh"
+                        icon="sap-icon://refresh"
+                        tooltip="Actualiser"
+                        type="Transparent"
+                        press=".onRefresh" />
+                </contentRight>
+            </Bar>
+        </subHeader>
+
+        <content>
+
+            <!-- ══ SECTION 1 : CALCUL FACTURATION ══ -->
+            <Panel id="panelCalcFact"
+                headerText="Calcul facturation"
+                expandable="true"
+                expanded="true"
+                class="sapUiSmallMarginBottom sapUiSmallMarginTop sapUiSmallMarginBeginEnd">
+
+                <CheckBox id="cbCalcFact"
+                    text="Docts calcul factur."
+                    selected="{viewModel>/inclureCalcFact}"
+                    select=".onToggleCalcFact"
+                    class="sapUiSmallMargin" />
+
+                <f:SimpleForm
+                    id="formCalcFact"
+                    editable="true"
+                    layout="ResponsiveGridLayout"
+                    labelSpanXL="4" labelSpanL="4" labelSpanM="5" labelSpanS="12"
+                    columnsXL="2" columnsL="2" columnsM="1">
+                    <f:content>
+
+                        <Label id="lblBelnr" text="N°doc.cal.fact." />
+                        <HBox id="hboxBelnr">
+                            <Input id="fBelnr"   placeholder="de" width="100%" submit=".onSearch" />
+                            <Text id="txtBelnrA" text="à"
+                                class="sapUiSmallMarginBegin sapUiSmallMarginEnd sapUiSmallMarginTop" />
+                            <Input id="fBelnrTo" placeholder="à"  width="100%" submit=".onSearch" />
+                        </HBox>
+
+                        <Label id="lblVertrag" text="Contrat" />
+                        <HBox id="hboxVertrag">
+                            <Input id="fVertrag"   placeholder="de" width="100%" submit=".onSearch" />
+                            <Text id="txtVertragA" text="à"
+                                class="sapUiSmallMarginBegin sapUiSmallMarginEnd sapUiSmallMarginTop" />
+                            <Input id="fVertragTo" placeholder="à"  width="100%" submit=".onSearch" />
+                        </HBox>
+
+                        <Label id="lblAbrvorg" text="N° exéc. PrgCalcFact" />
+                        <HBox id="hboxAbrvorg">
+                            <Input id="fAbrvorg"   placeholder="de" width="100%" submit=".onSearch" />
+                            <Text id="txtAbrvorgA" text="à"
+                                class="sapUiSmallMarginBegin sapUiSmallMarginEnd sapUiSmallMarginTop" />
+                            <Input id="fAbrvorgTo" placeholder="à"  width="100%" submit=".onSearch" />
+                        </HBox>
+
+                        <Label id="lblGpartner" text="CtrlVrais CalculFact" />
+                        <HBox id="hboxGpartner">
+                            <Input id="fGpartner"   placeholder="de" width="100%" submit=".onSearch" />
+                            <Text id="txtGpartnerA" text="à"
+                                class="sapUiSmallMarginBegin sapUiSmallMarginEnd sapUiSmallMarginTop" />
+                            <Input id="fGpartnerTo" placeholder="à"  width="100%" submit=".onSearch" />
+                        </HBox>
+
+                        <Label id="lblManoutsortCalc" text="MiseAttMan/CalcFact" />
+                        <HBox id="hboxManoutsortCalc">
+                            <Input id="fManoutsortCalc"   placeholder="de" width="100%" submit=".onSearch" />
+                            <Text id="txtManoutsortCalcA" text="à"
+                                class="sapUiSmallMarginBegin sapUiSmallMarginEnd sapUiSmallMarginTop" />
+                            <Input id="fManoutsortCalcTo" placeholder="à"  width="100%" submit=".onSearch" />
+                        </HBox>
+
+                        <Label id="lblVkont" text="Société" />
+                        <HBox id="hboxVkont">
+                            <Input id="fVkont"   placeholder="de" width="100%" submit=".onSearch" />
+                            <Text id="txtVkontA" text="à"
+                                class="sapUiSmallMarginBegin sapUiSmallMarginEnd sapUiSmallMarginTop" />
+                            <Input id="fVkontTo" placeholder="à"  width="100%" submit=".onSearch" />
+                        </HBox>
+
+                        <Label id="lblBegabrpe" text="Secteur d'activité" />
+                        <HBox id="hboxBegabrpe">
+                            <Input id="fBegabrpe"   placeholder="de" width="100%" submit=".onSearch" />
+                            <Text id="txtBegabrpeA" text="à"
+                                class="sapUiSmallMarginBegin sapUiSmallMarginEnd sapUiSmallMarginTop" />
+                            <Input id="fBegabrpeTo" placeholder="à"  width="100%" submit=".onSearch" />
+                        </HBox>
+
+                        <Label id="lblEndabrpe" text="Unité de relevé" />
+                        <HBox id="hboxEndabrpe">
+                            <Input id="fEndabrpe"   placeholder="de" width="100%" submit=".onSearch" />
+                            <Text id="txtEndabrpeA" text="à"
+                                class="sapUiSmallMarginBegin sapUiSmallMarginEnd sapUiSmallMarginTop" />
+                            <Input id="fEndabrpeTo" placeholder="à"  width="100%" submit=".onSearch" />
+                        </HBox>
+
+                    </f:content>
+                </f:SimpleForm>
+            </Panel>
+
+            <!-- ── Message avertissement ── -->
+            <MessageStrip
+                id="msgStripWarning"
+                text="{viewModel>/warningMsg}"
+                type="Warning"
+                showIcon="true"
+                visible="{= !!${viewModel>/warningMsg} }"
+                class="sapUiSmallMarginBeginEnd sapUiSmallMarginBottom" />
+
+            <!-- ══ SECTION 2 : FACTURATION ══ -->
+            <Panel id="panelFacturation"
+                headerText="Facturation"
+                expandable="true"
+                expanded="true"
+                class="sapUiSmallMarginBottom sapUiSmallMarginBeginEnd">
+
+                <CheckBox id="cbFacturation"
+                    text="Documts de facturat."
+                    selected="{viewModel>/inclureFacturation}"
+                    select=".onToggleFacturation"
+                    class="sapUiSmallMargin" />
+
+                <f:SimpleForm
+                    id="formFacturation"
+                    editable="{viewModel>/inclureFacturation}"
+                    layout="ResponsiveGridLayout"
+                    labelSpanXL="4" labelSpanL="4" labelSpanM="5" labelSpanS="12"
+                    columnsXL="2" columnsL="2" columnsM="1">
+                    <f:content>
+
+                        <Label id="lblBelnrFact" text="N° document imprimé" />
+                        <HBox id="hboxBelnrFact">
+                            <Input id="fBelnrFact"   placeholder="de" width="100%" submit=".onSearch" />
+                            <Text id="txtBelnrFactA" text="à"
+                                class="sapUiSmallMarginBegin sapUiSmallMarginEnd sapUiSmallMarginTop" />
+                            <Input id="fBelnrFactTo" placeholder="à"  width="100%" submit=".onSearch" />
+                        </HBox>
+
+                        <Label id="lblValidationFact" text="CtrlVraisCaFact" />
+                        <HBox id="hboxValidationFact">
+                            <Input id="fValidationFact"   placeholder="de" width="100%" submit=".onSearch" />
+                            <Text id="txtValidationFactA" text="à"
+                                class="sapUiSmallMarginBegin sapUiSmallMarginEnd sapUiSmallMarginTop" />
+                            <Input id="fValidationFactTo" placeholder="à"  width="100%" submit=".onSearch" />
+                        </HBox>
+
+                        <Label id="lblManoutsort" text="MseAtManCalFact" />
+                        <HBox id="hboxManoutsort">
+                            <Input id="fManoutsort"   placeholder="de" width="100%" submit=".onSearch" />
+                            <Text id="txtManoutsortA" text="à"
+                                class="sapUiSmallMarginBegin sapUiSmallMarginEnd sapUiSmallMarginTop" />
+                            <Input id="fManoutsortTo" placeholder="à"  width="100%" submit=".onSearch" />
+                        </HBox>
+
+                    </f:content>
+                </f:SimpleForm>
+            </Panel>
+
+            <!-- ── Barre Exécuter / Réinitialiser ── -->
+            <Toolbar id="toolbarSearch" style="Clear"
+                class="sapUiSmallMarginBottom sapUiSmallMarginBeginEnd">
+                <ToolbarSpacer id="spacerSearch" />
+                <Button id="btnReset"
+                    text="Réinitialiser"
+                    icon="sap-icon://clear-filter"
+                    type="Transparent"
+                    press=".onResetFilters" />
+                <Button id="btnGo"
+                    text="Exécuter"
+                    icon="sap-icon://search"
+                    type="Emphasized"
+                    press=".onSearch" />
+            </Toolbar>
+
+            <!-- ══ TABLE RÉSULTAT ══ -->
+            <ScrollContainer
+                id="scrollContainerTable"
+                horizontal="true"
+                vertical="false"
+                width="100%"
+                class="sapUiSmallMarginBeginEnd">
+
+                <Table
+                    id="verificationTable"
+                    width="auto"
+                    sticky="HeaderToolbar,ColumnHeaders"
+                    inset="false"
+                    mode="MultiSelect"
+                    alternateRowColors="true"
+                    growing="true"
+                    growingThreshold="500"
+                    growingScrollToLoad="false"
+                    noDataText="Aucun document trouvé – veuillez lancer une recherche"
+                    selectionChange=".onSelectionChange"
+                    updateFinished=".onUpdateFinished">
+
+                    <headerToolbar>
+                        <OverflowToolbar id="tableToolbar" style="Clear">
+                            <Title id="tableTitle2" text="Liste des documents" level="H4" />
+                            <ToolbarSpacer id="spacerTable" />
+                            <Text id="txtSel"
+                                text="{= ${viewModel>/selectedCount} + ' sélectionné(s)'}"
+                                visible="{= ${viewModel>/selectedCount} > 0}"
+                                class="sapUiSmallMarginEnd" />
+                        </OverflowToolbar>
+                    </headerToolbar>
+
+                </Table>
+
+            </ScrollContainer>
+
+        </content>
+    </Page>
+
+    <!-- ══ DIALOG – LIBÉRER DOCUMENT(S) ══ -->
+    <Dialog
+        id="dialogLiberer"
+        title="{viewModel>/dialogTitle}"
+        titleAlignment="Center"
+        contentWidth="520px"
+        draggable="true"
+        resizable="true"
+        busy="{viewModel>/busyDialog}"
+        busyIndicatorDelay="0">
+
+        <content>
+            <VBox id="vboxDialog" class="sapUiMediumMargin">
+
+                <FlexBox id="flexConfirm"
+                    justifyContent="Center" alignItems="Center"
+                    class="sapUiSmallMarginBottom">
+                    <core:Icon id="iconConfirm"
+                        src="sap-icon://sys-help-2"
+                        size="2.5rem" color="Neutral"
+                        class="sapUiSmallMarginEnd" />
+                    <Title id="titleConfirm"
+                        text="{= 'Confirmer la libération de ' + ${viewModel>/selectedCount} + ' document(s) ?'}"
+                        level="H4" />
+                </FlexBox>
+
+                <FlexBox id="flexModeDialog"
+                    justifyContent="Center"
+                    class="sapUiSmallMarginBottom">
+                    <ObjectStatus id="badgeModeDialog"
+                        text="{path: 'viewModel>/activeMode', formatter: '.formatModeText'}"
+                        icon="{= ${viewModel>/activeMode} === 'facturation' ? 'sap-icon://invoice' : 'sap-icon://document-text' }"
+                        state="{= ${viewModel>/activeMode} === 'facturation' ? 'Information' : 'Success' }"
+                        inverted="true" />
+                </FlexBox>
+
+                <Panel id="panelSelectedDocs"
+                    headerText="Documents sélectionnés"
+                    expandable="true" expanded="true"
+                    class="sapUiSmallMarginBottom">
+                    <List id="listSelectedDocs"
+                        items="{viewModel>/dialogDocs}"
+                        noDataText="Aucun document">
+                        <StandardListItem id="tplSelectedDoc"
+                            title="{viewModel>title}"
+                            description="{viewModel>description}"
+                            icon="sap-icon://document"
+                            iconDensityAware="false" />
+                    </List>
+                </Panel>
+
+                <Panel id="panelResults"
+                    headerText="Résultats de libération"
+                    expandable="true" expanded="true"
+                    visible="{viewModel>/showResults}"
+                    class="sapUiSmallMarginTop">
+                    <List id="listResults"
+                        items="{viewModel>/liberationResults}"
+                        noDataText="—">
+                        <CustomListItem id="tplResult">
+                            <FlexBox id="flexResult" alignItems="Center" class="sapUiSmallMargin">
+                                <core:Icon id="iconResult"
+                                    src="{= ${viewModel>success} ? 'sap-icon://accept' : 'sap-icon://error'}"
+                                    color="{= ${viewModel>success} ? 'Positive' : 'Negative'}"
+                                    size="1.2rem"
+                                    class="sapUiSmallMarginEnd" />
+                                <VBox id="vboxResult">
+                                    <Text id="txtResultKey"   text="{viewModel>keyValue}" />
+                                    <Text id="txtResultDetail"
+                                        text="{= ${viewModel>success}
+                                            ? ('Libéré le ' + ${viewModel>FreiAm} + ' par ' + ${viewModel>FreiVon})
+                                            : ${viewModel>message} }"
+                                        class="sapUiSmallFontSize" />
+                                </VBox>
+                            </FlexBox>
+                        </CustomListItem>
+                    </List>
+                </Panel>
+
+            </VBox>
+        </content>
+
+        <buttons>
+            <Button id="btnConfirmerLiberation"
+                text="Confirmer libération"
+                type="Accept"
+                icon="sap-icon://accept"
+                press=".onConfirmerLiberation"
+                visible="{= !${viewModel>/showResults} }" />
+            <Button id="btnFacturerDialog"
+                text="Facturer"
+                type="Emphasized"
+                icon="sap-icon://create"
+                press=".onFacturerDepuisDialog"
+                visible="{= ${viewModel>/showResults} &amp;&amp; ${viewModel>/showFacturerBtn} }" />
+            <Button id="btnFermer"
+                text="Fermer"
+                icon="sap-icon://decline"
+                press=".onFermerDialog" />
+        </buttons>
+    </Dialog>
+
+</mvc:View>

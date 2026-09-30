@@ -1,0 +1,249 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Gestion de la facturation</title>
+    <style>
+        html, body { height: 100%; margin: 0; }
+    </style>
+
+    <script>
+        window["sap-ushell-config"] = {
+            defaultRenderer: "fiori2",
+            renderers: {
+                fiori2: {
+                    componentData: {
+                        config: {
+                            enablePersonalization:            false,
+                            enableRecentActivity:             false,
+                            enableNotificationsUI:            false,
+                            enableSearch:                     false,
+                            enableSettingsButton:             false,
+                            moveAppFinderActionToShellHeader: false,
+                            rootIntent: "Shell-home"
+                        }
+                    }
+                }
+            },
+            services: {
+                "LaunchPage": {
+                    "adapter": {
+                        "config": {
+                            "groups": [
+                                {
+                                    "id": "group_facturation",
+                                    "title": "Gestion de la facturation",
+                                    "isPreset":      true,
+                                    "isVisible":     true,
+                                    "isGroupLocked": true,
+                                    "tiles": [
+                                        {
+                                            "id": "tile_OrdreReleve",
+                                            "tileType": "sap.ushell.ui.tile.StaticTile",
+                                            "properties": {
+                                                "title":     "Creation d'Ordre",
+                                                "subtitle":  "EL01 – Ordre de relève",
+                                                "icon":      "sap-icon://customer-order-entry",
+                                                "targetURL": "#OrdreReleve-display"
+                                            }
+                                        },
+                                        {
+                                            "id": "tile_SaisieReleve",
+                                            "tileType": "sap.ushell.ui.tile.StaticTile",
+                                            "properties": {
+                                                "title":     "Saisie de Relève",
+                                                "subtitle":  "EL28 – Saisie de Relève",
+                                                "icon":      "sap-icon://edit-outside",
+                                                "targetURL": "#SaisieReleve-display"
+                                            }
+                                        },
+                                        {
+                                            "id": "tile_OrdreCalcul",
+                                            "tileType": "sap.ushell.ui.tile.StaticTile",
+                                            "properties": {
+                                                "title":     "Calcul Facturation",
+                                                "subtitle":  "EA00 – Exécution de la facturation",
+                                                "icon":      "sap-icon://simulate",
+                                                "targetURL": "#OrdreCalcul-display"
+                                            }
+                                        },
+                                        {
+                                            "id": "tile_ValidationDocument",
+                                            "tileType": "sap.ushell.ui.tile.StaticTile",
+                                            "properties": {
+                                                "title":     "Validation document",
+                                                "subtitle":  "EA05 – Validation document",
+                                                "icon":      "sap-icon://order-status",
+                                                "targetURL": "#ValidationDocument-display"
+                                            }
+                                        },
+                                        {
+                                            "id": "tile_Facturation",
+                                            "tileType": "sap.ushell.ui.tile.StaticTile",
+                                            "properties": {
+                                                "title":     "Création Facture",
+                                                "subtitle":  "EA19 – Création de facture",
+                                                "icon":      "sap-icon://expense-report",
+                                                "targetURL": "#Facturation-display"
+                                            }
+                                        }
+                                    ]
+                                }
+                            ],
+                            "catalogs": []
+                        }
+                    }
+                },
+                "ClientSideTargetResolution": {
+                    "adapter": {
+                        "config": {
+                            "inbounds": {
+                                "OrdreReleve-display": {
+                                    "semanticObject": "OrdreReleve",
+                                    "action":         "display",
+                                    "title":          "Traitement des ordres de relevé",
+                                    "signature": {
+                                        "parameters":           {},
+                                        "additionalParameters": "allowed"
+                                    },
+                                    "resolutionResult": {
+                                        "applicationType":        "SAPUI5",
+                                        "additionalInformation":  "SAPUI5.Component=project2",
+                                        "url":                    "/",
+                                        "loadCoreExt":            false,
+                                        "loadDefaultDependencies": false,
+                                        "applicationDependencies": {
+                                            "startupParameters": {
+                                                "route": ["OrdreReleve"]
+                                            }
+                                        }
+                                    }
+                                },
+                                "SaisieReleve-display": {
+                                    "semanticObject": "SaisieReleve",
+                                    "action":         "display",
+                                    "title":          "Saisie de relevé",
+                                    "signature": {
+                                        "parameters":           {},
+                                        "additionalParameters": "allowed"
+                                    },
+                                    "resolutionResult": {
+                                        "applicationType":        "SAPUI5",
+                                        "additionalInformation":  "SAPUI5.Component=project2",
+                                        "url":                    "/",
+                                        "loadCoreExt":            false,
+                                        "loadDefaultDependencies": false,
+                                        "applicationDependencies": {
+                                            "startupParameters": {
+                                                "route": ["SaisieReleve"]
+                                            }
+                                        }
+                                    }
+                                },
+                                "OrdreCalcul-display": {
+                                    "semanticObject": "OrdreCalcul",
+                                    "action":         "display",
+                                    "title":          "Traitement des ordres de facturation",
+                                    "signature": {
+                                        "parameters":           {},
+                                        "additionalParameters": "allowed"
+                                    },
+                                    "resolutionResult": {
+                                        "applicationType":        "SAPUI5",
+                                        "additionalInformation":  "SAPUI5.Component=project2",
+                                        "url":                    "/",
+                                        "loadCoreExt":            false,
+                                        "loadDefaultDependencies": false
+                                    }
+                                },
+                                "ValidationDocument-display": {
+                                    "semanticObject": "ValidationDocument",
+                                    "action":         "display",
+                                    "title":          "Validation document",
+                                    "signature": {
+                                        "parameters":           {},
+                                        "additionalParameters": "allowed"
+                                    },
+                                    "resolutionResult": {
+                                        "applicationType":        "SAPUI5",
+                                        "additionalInformation":  "SAPUI5.Component=project2",
+                                        "url":                    "/",
+                                        "loadCoreExt":            false,
+                                        "loadDefaultDependencies": false,
+                                        "applicationDependencies": {
+                                            "startupParameters": {
+                                                "route": ["validation_document"]
+                                            }
+                                        }
+                                    }
+                                },
+                                "Facturation-display": {
+                                    "semanticObject": "Facturation",
+                                    "action":         "display",
+                                    "title":          "Création de facture EA19",
+                                    "signature": {
+                                        "parameters":           {},
+                                        "additionalParameters": "allowed"
+                                    },
+                                    "resolutionResult": {
+                                        "applicationType":        "SAPUI5",
+                                        "additionalInformation":  "SAPUI5.Component=project2",
+                                        "url":                    "/",
+                                        "loadCoreExt":            false,
+                                        "loadDefaultDependencies": false,
+                                        "applicationDependencies": {
+                                            "startupParameters": {
+                                                "route": ["facturation"]
+                                            }
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    }
+                },
+                "NavTargetResolution": {
+                    "config": {
+                        "enableClientSideTargetResolution": true
+                    }
+                },
+                "AppState": {
+                    "config": {
+                        "persistencyMethod": "InMemory"
+                    }
+                },
+                "CommonDataModel": {
+                    "config": {
+                        "enable": false
+                    }
+                }
+            }
+        };
+    </script>
+
+    <script src="/test-resources/sap/ushell/bootstrap/sandbox.js"></script>
+
+    <script
+        id="sap-ui-bootstrap"
+        src="/resources/sap-ui-core.js"
+        data-sap-ui-libs="sap.m,sap.ui.core,sap.f,sap.ui.comp,sap.ui.table,sap.uxap,sap.ui.export,sap.ushell,sap.ui.layout"
+        data-sap-ui-theme="sap_horizon"
+        data-sap-ui-preload="off"
+        data-sap-ui-language="fr"
+        data-sap-ui-compatVersion="edge"
+        data-sap-ui-async="true"
+        data-sap-ui-logLevel="error"
+        data-sap-ui-resourceroots='{"project2": "/"}'
+        data-sap-ui-frameOptions="allow">
+    </script>
+
+    <script>
+        sap.ui.getCore().attachInit(function () {
+            sap.ushell.Container.createRenderer().placeAt("content");
+        });
+    </script>
+</head>
+<body class="sapUiBody sapUiSizeCompact" id="content">
+</body>
+</html>

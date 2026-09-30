@@ -1,0 +1,326 @@
+<mvc:View
+    controllerName="project2.controller.Detail_document"
+    xmlns:mvc="sap.ui.core.mvc"
+    xmlns="sap.m"
+    xmlns:f="sap.ui.layout.form"
+    xmlns:core="sap.ui.core"
+    displayBlock="true">
+
+    <Page
+        id="detailDocPage"
+        title="Détail Document de Facturation"
+        showNavButton="true"
+        navButtonPress=".onNavBack"
+        busy="{viewModel>/busy}"
+        backgroundDesign="List">
+
+        <customHeader>
+            <Bar id="_IDBarHeader" design="Header">
+                <contentLeft>
+                    <Button id="_IDNavBack" icon="sap-icon://nav-back" press=".onNavBack" type="Transparent"/>
+                    <Title id="_IDTitleHeader" text="Détail Document de Facturation" level="H3" titleStyle="H4"/>
+                </contentLeft>
+            </Bar>
+        </customHeader>
+
+        <content>
+
+            <!-- ══════════════════════════════════════════
+                 HERO PANEL
+                 ══════════════════════════════════════════ -->
+            <Panel id="_IDHeroPanel" backgroundDesign="Solid" class="sapUiNoContentPadding">
+                <content>
+                    <VBox id="_IDHeroVBox" class="sapUiLargeMarginBeginEnd sapUiMediumMarginTopBottom">
+
+                        <!-- Row 1 : Document number vs Partner -->
+                        <HBox id="_IDHeroRow1"
+                            justifyContent="SpaceBetween"
+                            alignItems="Center"
+                            class="sapUiMediumMarginBottom">
+
+                            <!-- Left : icon + title block -->
+                            <HBox id="_IDHeroLeft" alignItems="Center">
+                                <core:Icon
+                                    id="_IDGenIcon"
+                                    src="sap-icon://document-text"
+                                    size="2rem"
+                                    color="Highlight"
+                                    class="sapUiMediumMarginEnd"/>
+                                <VBox id="_IDTitleVBox">
+                                    <Label id="_IDDocSubLabel"
+                                        text="Document de facturation"
+                                        class="sapUiTinyMarginBottom"/>
+                                    <Title id="_IDDocTitle"
+                                        text="{path: 'viewModel>/header/Belnr', formatter: '.formatDocumentTitle'}"
+                                        level="H2"
+                                        titleStyle="H2"/>
+                                </VBox>
+                            </HBox>
+
+                            <!-- Right : partner -->
+                            <VBox id="_IDHeroRight" alignItems="End">
+                                <HBox id="_IDPartnerRow" alignItems="Center" class="sapUiTinyMarginBottom">
+                                    <core:Icon
+                                        id="_IDGenIcon10"
+                                        src="sap-icon://customer"
+                                        size="1rem"
+                                        color="Highlight"
+                                        class="sapUiTinyMarginEnd"/>
+                                    <Text id="_IDPartnerValue" text="{viewModel>/header/Gpartner}"/>
+                                </HBox>
+                                <Label id="_IDPartnerLabel" text="Partenaire"/>
+                            </VBox>
+                        </HBox>
+
+                        <!-- Row 2 : Badges -->
+                        <HBox id="_IDHeroBadges" wrap="Wrap" alignItems="Center">
+
+                            <HBox id="_IDBadgeVkont" alignItems="Center" class="sapUiSmallMarginEnd sapUiTinyMarginBottom">
+                                <core:Icon
+                                    id="_IDGenIcon11"
+                                    src="sap-icon://account"
+                                    size="0.875rem"
+                                    color="Highlight"
+                                    class="sapUiTinyMarginEnd"/>
+                                <Text id="_IDVkontBadge"
+                                    text="{path: 'viewModel>/header/Vkont', formatter: '.formatVkontBadge'}"/>
+                            </HBox>
+
+                            <core:Icon id="_IDGenIcon15" src="sap-icon://slim-arrow-right" size="0.75rem" color="Neutral" class="sapUiSmallMarginEnd sapUiTinyMarginBottom"/>
+
+                            <HBox id="_IDBadgeVertrag" alignItems="Center" class="sapUiSmallMarginEnd sapUiTinyMarginBottom">
+                                <core:Icon
+                                    id="_IDGenIcon12"
+                                    src="sap-icon://add-document"
+                                    size="0.875rem"
+                                    color="Positive"
+                                    class="sapUiTinyMarginEnd"/>
+                                <Text id="_IDVertragBadge"
+                                    text="{path: 'viewModel>/header/Vertrag', formatter: '.formatVertragBadge'}"/>
+                            </HBox>
+
+                            <core:Icon id="_IDGenIcon16" src="sap-icon://slim-arrow-right" size="0.75rem" color="Neutral" class="sapUiSmallMarginEnd sapUiTinyMarginBottom"/>
+
+                            <HBox id="_IDBadgeAbrvorg" alignItems="Center" class="sapUiTinyMarginBottom">
+                                <core:Icon
+                                    id="_IDGenIcon13"
+                                    src="sap-icon://group"
+                                    size="0.875rem"
+                                    color="Neutral"
+                                    class="sapUiTinyMarginEnd"/>
+                                <Text id="_IDAbrvorgBadge"
+                                    text="{path: 'viewModel>/header/Abrvorg', formatter: '.formatAbrvorgBadge'}"/>
+                            </HBox>
+
+                        </HBox>
+                    </VBox>
+                </content>
+            </Panel>
+
+            <!-- ══════════════════════════════════════════
+                 ICON TAB BAR
+                 ══════════════════════════════════════════ -->
+            <IconTabBar
+                id="iconTabBar"
+                expandable="false"
+                stretchContentHeight="false"
+                class="sapUiSmallMarginTop"
+                select=".onTabSelect">
+                <items>
+
+                    <!-- ─── TAB 1 — Données Entête ─── -->
+                    <IconTabFilter
+                        id="_IDTabEntete"
+                        icon="sap-icon://header"
+                        text="Donn. E-T"
+                        key="entete">
+                        <content>
+                            <VBox id="_IDEnteteVBox" class="sapUiMediumMarginBeginEnd sapUiSmallMarginTopBottom">
+
+                                <HBox id="_IDEnteteTitleRow" alignItems="Center" class="sapUiSmallMarginBottom">
+                                    <core:Icon id="_IDGenIcon17"
+                                        src="sap-icon://hint"
+                                        size="1rem"
+                                        color="Highlight"
+                                        class="sapUiSmallMarginEnd"/>
+                                    <Title id="_IDEnteteSecTitle"
+                                        text="Identité du document"
+                                        level="H4"
+                                        titleStyle="H5"/>
+                                </HBox>
+
+                                <Panel id="_IDEnteteInnerPanel" backgroundDesign="Solid" class="sapUiNoContentPadding">
+                                    <content>
+                                        <f:SimpleForm
+                                            id="_IDSFEntete"
+                                            editable="false"
+                                            layout="ResponsiveGridLayout"
+                                            labelSpanL="5" labelSpanM="5"
+                                            emptySpanL="1" emptySpanM="0"
+                                            columnsL="2" columnsM="2"
+                                            class="sapUiSmallMargin">
+                                            <f:content>
+                                                <Label id="_IDGenLabel10" text="Nº doc. cal. fact." design="Bold"/>
+                                                <Text id="_IDGenText11" text="{viewModel>/header/Belnr}"/>
+
+                                                <Label id="_IDGenLabel11" text="Partenaire" design="Bold"/>
+                                                <Text id="_IDGenText15" text="{viewModel>/header/Gpartner}"/>
+
+                                                <Label id="_IDGenLabel12" text="Compte contrat" design="Bold"/>
+                                                <Text id="_IDGenText20" text="{viewModel>/header/Vkont}"/>
+
+                                                <Label id="_IDGenLabel13" text="Contrat" design="Bold"/>
+                                                <Text id="_IDGenText24" text="{viewModel>/header/Vertrag}"/>
+
+                                                <Label id="_IDGenLabel14" text="Type regroupement" design="Bold"/>
+                                                <Text id="_IDGenText26" text="{viewModel>/header/Abrvorg}"/>
+
+                                                <Label id="_IDGenLabel15" text="Date facturation" design="Bold"/>
+                                                <Text id="_IDGenText27" text="{path: 'viewModel>/header/Abrdats', formatter: '.formatDate'}"/>
+                                            </f:content>
+                                        </f:SimpleForm>
+                                    </content>
+                                </Panel>
+
+                            </VBox>
+                        </content>
+                    </IconTabFilter>
+
+                    <!-- ─── TAB 2 — Période ─── -->
+                    <IconTabFilter
+                        id="_IDTabPeriode"
+                        icon="sap-icon://date-time"
+                        text="Période"
+                        key="periode">
+                        <content>
+                            <VBox id="_IDPeriodeVBox" class="sapUiMediumMarginBeginEnd sapUiSmallMarginTopBottom">
+
+                                <HBox id="_IDPeriodeTitleRow" alignItems="Center" class="sapUiSmallMarginBottom">
+                                    <core:Icon id="_IDGenIcon18"
+                                        src="sap-icon://date-time"
+                                        size="1rem"
+                                        color="Highlight"
+                                        class="sapUiSmallMarginEnd"/>
+                                    <Title id="_IDGenTitle3"
+                                        text="Période de consommation"
+                                        level="H4"
+                                        titleStyle="H5"/>
+                                </HBox>
+
+                                <Panel id="_IDPeriodeInnerPanel" backgroundDesign="Solid" class="sapUiNoContentPadding">
+                                    <content>
+                                        <f:SimpleForm
+                                            id="_IDSFPeriode"
+                                            editable="false"
+                                            layout="ResponsiveGridLayout"
+                                            labelSpanL="5" labelSpanM="5"
+                                            emptySpanL="1" emptySpanM="0"
+                                            columnsL="2" columnsM="2"
+                                            class="sapUiSmallMargin">
+                                            <f:content>
+                                                <Label id="_IDGenLabel18" text="Début période" design="Bold"/>
+                                                <Text id="_IDGenText30" text="{path: 'viewModel>/header/Begabrpe', formatter: '.formatDate'}"/>
+
+                                                <Label id="_IDGenLabel19" text="Fin de période" design="Bold"/>
+                                                <Text id="_IDGenText31" text="{path: 'viewModel>/header/Endabrpe', formatter: '.formatDate'}"/>
+
+                                                <Label id="_IDGenLabel20" text="Date de facturation" design="Bold"/>
+                                                <Text id="_IDGenText32" text="{path: 'viewModel>/header/Abrdats', formatter: '.formatDate'}"/>
+                                            </f:content>
+                                        </f:SimpleForm>
+                                    </content>
+                                </Panel>
+
+                            </VBox>
+                        </content>
+                    </IconTabFilter>
+
+                    <!-- ─── TAB 3 — Détail calcul ─── -->
+                    <IconTabFilter
+                        id="_IDTabLignes"
+                        icon="sap-icon://table-row"
+                        text="Détail calcul"
+                        key="lignes"
+                        count="{viewModel>/lignesCount}">
+                        <content>
+                            <VBox id="_IDLignesVBox" class="sapUiSmallMarginBeginEnd sapUiSmallMarginTopBottom">
+
+                                <!-- Toolbar -->
+                                <Toolbar id="_IDGenToolbar" class="sapUiSmallMarginBottom">
+                                    <HBox id="_IDGenHBox" alignItems="Center">
+                                        <core:Icon id="_IDGenIcon19"
+                                            src="sap-icon://table-row"
+                                            size="1rem"
+                                            color="Highlight"
+                                            class="sapUiSmallMarginEnd"/>
+                                        <Title id="_IDGenTitle4" text="Détail des calcul" level="H4" titleStyle="H5"/>
+                                    </HBox>
+                                    <ToolbarSpacer id="_IDGenToolbarSpacer1"/>
+                                    <SearchField
+                                        id="_IDGenSearchField"
+                                        width="220px"
+                                        placeholder="Filtrer par type, variante…"
+                                        liveChange=".onFilterLignes"/>
+                                </Toolbar>
+
+                                <!-- Table -->
+                                <ScrollContainer
+                                    id="_IDLignesScroll"
+                                    horizontal="true"
+                                    vertical="false"
+                                    width="100%">
+                                    <Table
+                                        id="_IDLignesTable"
+                                        items="{viewModel>/lignes}"
+                                        mode="None"
+                                        backgroundDesign="Transparent"
+                                        sticky="ColumnHeaders"
+                                        growing="true"
+                                        growingThreshold="20"
+                                        width="auto"
+                                        alternateRowColors="true"
+                                        showSeparators="Inner">
+                                        <columns>
+                                            <Column id="_IDGenColumn"     width="4rem"  hAlign="Center"><Text id="_IDGenText36"   text="Ligne"/></Column>
+                                            <Column id="_IDGenColumn1"    width="8rem">                 <Text id="_IDGenText37"   text="Type"/></Column>
+                                            <Column id="_IDGenColumn2"    width="10rem">                <Text id="_IDGenText38"   text="Variante"/></Column>
+                                            <Column id="_IDGenColumn3"    width="10rem" hAlign="End">   <Text id="_IDGenText39"   text="Quantité"/></Column>
+                                            <Column id="_IDGenColumn4"    width="6rem">                 <Text id="_IDGenText40"   text="Unité"/></Column>
+                                            <Column id="_IDGenColumn5"    width="12rem" hAlign="End">   <Text id="_IDGenText41"   text="Montant net"/></Column>
+                                            <Column id="_IDGenColumn6"    width="10rem" hAlign="End">   <Text id="_IDGenText42"   text="Prix unitaire"/></Column>
+                                            <Column id="_IDGenColumn7"    width="6rem">                 <Text id="_IDGenText43"   text="Devise"/></Column>
+                                            <Column id="_IDGenColumnGrp"  width="10rem">                <Text id="_IDGenTextGrp"  text="Grp. Val. Fix."/></Column>
+                                            <Column id="_IDGenColumnTVA"  width="8rem">                 <Text id="_IDGenTextTVA"  text="Code TVA"/></Column>
+                                            <Column id="_IDGenColumnPrix" width="12rem" hAlign="End">   <Text id="_IDGenTextPrix" text="Prix"/></Column>
+                                        </columns>
+                                        <items>
+                                            <ColumnListItem id="_IDGenColumnListItem" type="Inactive">
+                                                <cells>
+                                                    <Text id="_IDGenText44"      text="{viewModel>Belzeile}"/>
+                                                    <Text id="_IDGenText45"      text="{viewModel>Belzart}"/>
+                                                    <Text id="_IDGenText46"      text="{viewModel>Programm}"/>
+                                                    <Text id="_IDGenText47"      text="{viewModel>IAbrmenge}"/>
+                                                    <Text id="_IDGenText48"      text="{viewModel>Massbill}"/>
+                                                    <Text id="_IDGenText49"      text="{viewModel>Nettobtr}"/>
+                                                    <Text id="_IDGenText50"      text="{viewModel>Urpreis}"/>
+                                                    <Text id="_IDGenText51"      text="{viewModel>Twaers}"/>
+                                                    <Text id="_IDGenTextGrpVal"  text="{viewModel>GrpValFix}"/>
+                                                    <Text id="_IDGenTextMwskz"   text="{viewModel>Mwskz}"/>
+                                                    <Text id="_IDGenTextPrixVal" text="{viewModel>Prix}"/>
+                                                </cells>
+                                            </ColumnListItem>
+                                        </items>
+                                    </Table>
+                                </ScrollContainer>
+
+                            </VBox>
+                        </content>
+                    </IconTabFilter>
+
+                </items>
+            </IconTabBar>
+
+        </content>
+    </Page>
+
+</mvc:View>

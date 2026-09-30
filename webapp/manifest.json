@@ -1,0 +1,171 @@
+{
+  "_version": "1.37.0",
+  "sap.app": {
+    "id": "project2",
+    "type": "application",
+    "i18n": {
+      "bundleName": "project2.i18n.i18n",
+      "supportedLocales": ["", "fr", "en"],
+      "fallbackLocale": ""
+    },
+    "applicationVersion": { "version": "0.0.1" },
+    "title": "{{appTitle}}",
+    "description": "{{appDescription}}",
+    "resources": "resources.json",
+    "dataSources": {
+      "mainService": {
+        "uri": "/sap/opu/odata/sap/Z_PFE__PROJET_SRV/",
+        "type": "OData",
+        "settings": {
+          "annotations": [],
+          "localUri": "localService/mainService/metadata.xml",
+          "odataVersion": "2.0"
+        }
+      }
+    }
+  },
+  "sap.ui": {
+    "technology": "UI5",
+    "deviceTypes": { "desktop": true, "tablet": true, "phone": true }
+  },
+  "sap.ui5": {
+    "flexEnabled": true,
+    "dependencies": {
+      "minUI5Version": "1.96.6",
+      "libs": {
+        "sap.m": {},
+        "sap.ui.core": {},
+        "sap.f": {},
+        "sap.ui.comp": {},
+        "sap.ui.table": {},
+        "sap.uxap": {},
+        "sap.ui.export": {},
+        "sap.ui.layout": {}
+      }
+    },
+    "contentDensities": { "compact": true, "cozy": true },
+    "models": {
+      "i18n": {
+        "type": "sap.ui.model.resource.ResourceModel",
+        "settings": {
+          "bundleName": "project2.i18n.i18n",
+          "supportedLocales": ["", "fr", "en"],
+          "fallbackLocale": ""
+        }
+      },
+      "": {
+        "dataSource": "mainService",
+        "preload": true,
+        "settings": {}
+      }
+    },
+    "resources": {
+      "css": [{ "uri": "css/style.css" }]
+    },
+    "routing": {
+      "config": {
+        "routerClass": "sap.m.routing.Router",
+        "viewType": "XML",
+        "async": true,
+        "viewPath": "project2.view",
+        "controlAggregation": "pages",
+        "controlId": "app",
+        "clearControlAggregation": false
+      },
+      "routes": [
+        {
+          "name": "RouteOrdreReleve",
+          "pattern": "OrdreReleve/:?query:",
+          "target": ["TargetOrdreReleve"]
+        },
+        {
+          "name": "RouteSaisieReleve",
+          "pattern": "saisiereleve/:?query:",
+          "target": ["TargetSaisieReleve"]
+        },
+        {
+          "name": "RouteValidation_document",
+          "pattern": "validation_document/:?query:",
+          "target": ["TargetValidation_document"]
+        },
+        {
+          "name": "RouteFacturation",
+          "pattern": "facturation/:?query:",
+          "target": ["TargetFacturation"]
+        },
+        {
+          "name": "RouteDetail",
+          "pattern": "detail/{Anlage}/{Abrdats}",
+          "target": ["TargetDetail"]
+        },
+        {
+          "name": "RouteDetail_document",
+          "pattern": "detail_document/{Belnr}",
+          "target": ["TargetDetail_document"]
+        },
+        {
+          "name": "Routeordre_de_calcul",
+          "pattern": ":?query:",
+          "target": ["Targetordre_de_calcul"]
+        }
+      ],
+      "targets": {
+        "TargetOrdreReleve": {
+          "viewType": "XML",
+          "transition": "slide",
+          "clearControlAggregation": false,
+          "viewId": "OrdreReleve",
+          "viewName": "OrdreReleve"
+        },
+        "TargetSaisieReleve": {
+          "viewType": "XML",
+          "transition": "slide",
+          "clearControlAggregation": false,
+          "viewId": "saisiereleve",
+          "viewName": "saisiereleve"
+        },
+        "Targetordre_de_calcul": {
+          "viewType": "XML",
+          "transition": "slide",
+          "clearControlAggregation": false,
+          "viewId": "ordre_de_calcul",
+          "viewName": "ordre_de_calcul"
+        },
+        "TargetValidation_document": {
+          "viewType": "XML",
+          "transition": "slide",
+          "clearControlAggregation": false,
+          "viewId": "validation_document",
+          "viewName": "validation_document"
+        },
+        "TargetDetail": {
+          "viewType": "XML",
+          "transition": "slide",
+          "clearControlAggregation": false,
+          "viewId": "Detail",
+          "viewName": "Detail"
+        },
+        "TargetDetail_document": {
+          "viewType": "XML",
+          "transition": "slide",
+          "clearControlAggregation": false,
+          "viewId": "Detail_document",
+          "viewName": "Detail_document"
+        },
+        "TargetFacturation": {
+          "viewType": "XML",
+          "transition": "slide",
+          "clearControlAggregation": false,
+          "viewId": "Facturation",
+          "viewName": "Facturation"
+        }
+      }
+    },
+    "rootView": {
+      "viewName": "project2.view.App",
+      "type": "XML",
+      "async": true,
+      "id": "App"
+    }
+  }
+}

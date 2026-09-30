@@ -1,0 +1,100 @@
+<mvc:View controllerName="project2.controller.Facturation"
+    xmlns:mvc="sap.ui.core.mvc"
+    xmlns="sap.m"
+    xmlns:l="sap.ui.layout"
+    xmlns:f="sap.ui.layout.form"
+    displayBlock="true"
+    height="100%">
+
+    <Page id="_IDGenPage" title="Création de Facture EA19"
+          showNavButton="true"
+          navButtonPress=".onNavBack"
+          enableScrolling="true">
+
+        <content>
+
+            <!-- Panneau de recherche -->
+            <Panel id="_IDGenPanel" headerText="Recherche"
+                   class="sapUiResponsiveMargin" width="auto">
+                <content>
+                    <f:SimpleForm id="_IDGenSimpleForm" editable="true" layout="ResponsiveGridLayout">
+                        <Label id="_IDGenLabel9" text="Partenaire"/>
+                        <Input id="inputPartner"
+                               placeholder="Ex: 3000193"
+                               liveChange=".onClearOther"/>
+                        <Label id="_IDGenLabel16" text="Compte Contrat"/>
+                        <Input id="inputVkont"
+                               placeholder="Ex: 210000050"
+                               liveChange=".onClearOther"/>
+                    </f:SimpleForm>
+                    <HBox id="_IDGenHBox1" justifyContent="End"
+                          class="sapUiSmallMarginEnd sapUiSmallMarginBottom">
+                        <Button id="_IDGenButton1" text="Rechercher"
+                                type="Emphasized"
+                                icon="sap-icon://search"
+                                press=".onSearchDocuments"/>
+                    </HBox>
+                </content>
+            </Panel>
+
+            <!-- Panneau des documents -->
+            <Panel id="_IDGenPanel2"
+                   class="sapUiResponsiveMargin" width="auto">
+
+                <!-- Titre + bouton Facturer sur la même ligne -->
+                <headerToolbar>
+                    <Toolbar id="_IDGenToolbar11">
+                        <Title id="_IDGenTitle11" text="Documents de facturation"/>
+                        <ToolbarSpacer id="_IDGenToolbarSpacer11"/>
+                        <Button id="btnFacturer"
+                                text="Facturer"
+                                type="Accept"
+                                icon="sap-icon://create"
+                                press=".onFacturer"/>
+                    </Toolbar>
+                </headerToolbar>
+
+                <content>
+                    <Table id="documentsTable"
+                           items="{factureModel>/documents}"
+                           mode="MultiSelect"
+                           noDataText="Aucun document — lancez une recherche">
+                        <columns>
+                            <Column id="_IDGenColumn8">
+                                <Text id="_IDGenText28" text="N° Doc.Cal.Fact."/>
+                            </Column>
+                            <Column id="_IDGenColumn9">
+                                <Text id="_IDGenText29" text="Partenaire"/>
+                            </Column>
+                            <Column id="_IDGenColumn10">
+                                <Text id="_IDGenText33" text="Cpte Contrat"/>
+                            </Column>
+                            <Column id="_IDGenColumn11">
+                                <Text id="_IDGenText34" text="Contrat"/>
+                            </Column>
+                            <Column id="_IDGenColumn12">
+                                <Text id="_IDGenText35" text="Déb. Période"/>
+                            </Column>
+                            <Column id="_IDGenColumn13">
+                                <Text id="_IDGenText52" text="Fin Période"/>
+                            </Column>
+                        </columns>
+                        <items>
+                            <ColumnListItem id="_IDGenColumnListItem1">
+                                <cells>
+                                    <Text id="_IDGenText55" text="{factureModel>Belnr}"/>
+                                    <Text id="_IDGenText56" text="{factureModel>Gpartner}"/>
+                                    <Text id="_IDGenText57" text="{factureModel>Vkont}"/>
+                                    <Text id="_IDGenText58" text="{factureModel>Vertrag}"/>
+                                    <Text id="_IDGenText59" text="{factureModel>DateFrom}"/>
+                                    <Text id="_IDGenText60" text="{factureModel>DateTo}"/>
+                                </cells>
+                            </ColumnListItem>
+                        </items>
+                    </Table>
+                </content>
+            </Panel>
+
+        </content>
+    </Page>
+</mvc:View>

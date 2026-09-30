@@ -1,0 +1,272 @@
+<mvc:View
+    controllerName="project2.controller.OrdreReleve"
+    xmlns:mvc="sap.ui.core.mvc"
+    xmlns="sap.m"
+    xmlns:f="sap.ui.layout.form"
+    xmlns:core="sap.ui.core"
+    displayBlock="true">
+
+    <Page
+        id="pageOrdreReleve"
+        title="Exécuter Création d'ordre de Relève"
+        showNavButton="true"
+        navButtonPress=".onNavBack"
+        busy="{viewModel>/busy}">
+
+        <content>
+            <VBox id="_IDGenVBox" class="sapUiSmallMargin">
+
+                <Panel id="_IDGenPanel3" headerText="Liste d'objets / Autres données" expandable="true" expanded="true">
+                    <content>
+                        <f:Form id="_IDGenForm" editable="true" class="sapUiSmallMarginTop">
+                            <f:layout>
+                                <f:ResponsiveGridLayout id="_IDGenResponsiveGridLayout"
+                                    columnsXL="2" columnsL="2" columnsM="2"
+                                    labelSpanXL="5" labelSpanL="5" labelSpanM="5" labelSpanS="12"
+                                    adjustLabelSpan="false"
+                                    singleContainerFullSize="false" />
+                            </f:layout>
+                            <f:formContainers>
+
+                                <f:FormContainer id="_IDGenFormContainer" title="Liste d'objets">
+                                    <f:formElements>
+
+                                        <f:FormElement id="_IDGenFormElement" label="Unité de Relève">
+                                            <f:fields>
+                                                <HBox id="_IDGenHBox2" alignItems="Center">
+                                                    <RadioButton id="rbUniteReleve" groupName="objectType" selected="true" select=".onObjectTypeChange" />
+                                                    <Input id="inputUniteReleve"
+                                                        value="{viewModel>/listObjets/uniteReleve}"
+                                                        width="180px" maxLength="8"
+                                                        enabled="{= ${viewModel>/selectedObjectType} === 'UniteReleve' }"
+                                                        placeholder="Ex: MRUEM01" />
+                                                </HBox>
+                                            </f:fields>
+                                        </f:FormElement>
+
+                                        <!--<f:FormElement id="_IDGenFormElement1" label="Contrat">
+                                            <f:fields>
+                                                <HBox id="_IDGenHBox3" alignItems="Center">
+                                                    <RadioButton id="rbContrat" groupName="objectType" select=".onObjectTypeChange" />
+                                                    <Input id="inputContrat"
+                                                        value="{viewModel>/listObjets/contrat}"
+                                                        width="180px"
+                                                        enabled="{= ${viewModel>/selectedObjectType} === 'Contrat' }"
+                                                        placeholder="Numéro contrat" />
+                                                </HBox>
+                                            </f:fields>
+                                        </f:FormElement>-->
+
+                                        <f:FormElement id="_IDGenFormElement2" label="Installation">
+                                            <f:fields>
+                                                <HBox id="_IDGenHBox4" alignItems="Center">
+                                                    <RadioButton id="rbInstallation" groupName="objectType" select=".onObjectTypeChange" />
+                                                    <Input id="inputInstallation"
+                                                        value="{viewModel>/listObjets/installation}"
+                                                        width="180px" maxLength="10"
+                                                        enabled="{= ${viewModel>/selectedObjectType} === 'Installation' }"
+                                                        placeholder="N° Installation" />
+                                                </HBox>
+                                            </f:fields>
+                                        </f:FormElement>
+
+                                        <!--<f:FormElement id="_IDGenFormElement3" label="Appareil">
+                                            <f:fields>
+                                                <HBox id="_IDGenHBox5" alignItems="Center">
+                                                    <RadioButton id="rbAppareil" groupName="objectType" select=".onObjectTypeChange" />
+                                                    <Input id="inputAppareil"
+                                                        value="{viewModel>/listObjets/appareil}"
+                                                        width="180px"
+                                                        enabled="{= ${viewModel>/selectedObjectType} === 'Appareil' }"
+                                                        placeholder="N° Appareil" />
+                                                </HBox>
+                                            </f:fields>
+                                        </f:FormElement>-->
+
+                                    </f:formElements>
+                                </f:FormContainer>
+
+                                <f:FormContainer id="_IDGenFormContainer1" title="Autres données">
+                                    <f:formElements>
+                                        <f:FormElement id="_IDGenFormElement4" label="MtfRel">
+                                            <f:fields>
+                                                <Select id="selMtfRel" selectedKey="{viewModel>/autresDonnees/mtfRel}" width="200px">
+                                                    <core:Item id="_IDGenItem3" key=""   text="-- Sélectionner --" />
+                                                    <core:Item id="_IDGenItem4" key="01" text="01 – Relève périodique" />
+                                                    <core:Item id="_IDGenItem5" key="02" text="02 – Relève spécial" />
+                                                    <core:Item id="_IDGenItem6" key="03" text="03 – Relève final" />
+                                                    <core:Item id="_IDGenItem7" key="04" text="04 – Relève initial" />
+                                                </Select>
+                                            </f:fields>
+                                        </f:FormElement>
+                                    </f:formElements>
+                                </f:FormContainer>
+
+                            </f:formContainers>
+                        </f:Form>
+                    </content>
+                </Panel>
+
+                <Toolbar id="_IDGenToolbar1" class="sapUiSmallMarginTop">
+                    <Button id="_IDGenButton"  text="Exécuter"      type="Emphasized" icon="sap-icon://activate"  press=".onExecuter" />
+                    <Button id="_IDGenButton2" text="Réinitialiser" type="Default"    icon="sap-icon://sys-cancel" press=".onReset" class="sapUiSmallMarginBegin" />
+                </Toolbar>
+
+                <Panel id="_IDGenPanel5"
+                    expandable="true"
+                    expanded="true"
+                    class="sapUiSmallMarginTop"
+                    visible="{= ${viewModel>/tableVisible} }">
+
+                    <headerToolbar>
+                        <OverflowToolbar id="_IDGenToolbar2">
+                            <Title id="_IDGenTitle111" text="{= 'Liste des enregistrements de planning réel' + (${viewModel>/totalCount} > 0 ? ' (' + ${viewModel>/totalCount} + ')' : '') }" level="H2" />
+                            <ToolbarSpacer id="_IDGenToolbarSpacer3" />
+                            <Button
+                                id="btnCreerOrdre"
+                                text="Créer un ordre"
+                                type="Emphasized"
+                                icon="sap-icon://create"
+                                press=".onCreerOrdre"
+                                visible="{= !!${viewModel>/selectedRow} }" />
+                            <Button id="btnExport"
+                                icon="sap-icon://excel-attachment"
+                                tooltip="Exporter Excel"
+                                press=".onExport"
+                                type="Transparent"
+                                enabled="{= ${viewModel>/totalCount} > 0 }" />
+                        </OverflowToolbar>
+                    </headerToolbar>
+
+                    <content>
+
+                        <Table
+                            id="tableReleve"
+                            items="{
+                                path: '/planifreleveSet',
+                                parameters: { operationMode: 'Server' },
+                                events: { dataReceived: '.onDataReceived' }
+                            }"
+                            mode="SingleSelectMaster"
+                            selectionChange=".onRowSelectionChange"
+                            growing="true"
+                            growingThreshold="20"
+                            growingScrollToLoad="true"
+                            sticky="ColumnHeaders"
+                            alternateRowColors="true"
+                            noDataText="Aucune donnée disponible"
+                            class="sapUiSmallMarginTop">
+
+                            <columns>
+                                <Column id="colAnlage"    minScreenWidth="Tablet" demandPopin="false" width="14rem"><Text id="_IDGenText54" text="Installation" /></Column>
+                                <Column id="colTermschl"  minScreenWidth="Tablet" demandPopin="false" width="8rem" ><Text id="_IDGenText61" text="UteRel"       /></Column>
+                                <Column id="colTermtdat"  minScreenWidth="Tablet" demandPopin="true"  width="9rem" ><Text id="_IDGenText62" text="EnrgPlRéel"   /></Column>
+                                <Column id="colAdatsoll"  minScreenWidth="Tablet" demandPopin="false" width="9rem" ><Text id="_IDGenText63" text="DteRelPlan"   /></Column>
+                                <Column id="colAblesgr"   minScreenWidth="Tablet" demandPopin="true"  width="5rem"  hAlign="Center"><Text id="_IDGenText64" text="MR"  /></Column>
+                                <Column id="colAblesart"  minScreenWidth="Tablet" demandPopin="true"  width="5rem"  hAlign="Center"><Text id="_IDGenText65" text="TRP" /></Column>
+                                <Column id="colEstinbill" minScreenWidth="Tablet" demandPopin="true"  width="5rem"  hAlign="Center"><Text id="_IDGenText66" text="EdC" /></Column>
+                                <Column id="colStatut"    minScreenWidth="Tablet" demandPopin="false" width="10rem"><Text id="_IDGenText67" text="Statut"       /></Column>
+                            </columns>
+
+                            <items>
+                                <ColumnListItem
+                                    id="cliReleve"
+                                    type="Active"
+                                    highlight="{
+                                        parts: [
+                                            { path: 'ANLAGE' },
+                                            { path: 'Adatsoll' },
+                                            { path: 'viewModel>/ordresExistants' }
+                                        ],
+                                        formatter: '.formatRowHighlight'
+                                    }">
+
+                                    <cells>
+
+                                        <HBox id="hbxAnlage" alignItems="Center">
+                                            <core:Icon id="icoStatutAnlage"
+                                                src="{
+                                                    parts: [
+                                                        { path: 'ANLAGE' },
+                                                        { path: 'Adatsoll' },
+                                                        { path: 'viewModel>/ordresExistants' }
+                                                    ],
+                                                    formatter: '.formatOrdreIcon'
+                                                }"
+                                                color="{
+                                                    parts: [
+                                                        { path: 'ANLAGE' },
+                                                        { path: 'Adatsoll' },
+                                                        { path: 'viewModel>/ordresExistants' }
+                                                    ],
+                                                    formatter: '.formatOrdreIconColor'
+                                                }"
+                                                tooltip="{
+                                                    parts: [
+                                                        { path: 'ANLAGE' },
+                                                        { path: 'Adatsoll' },
+                                                        { path: 'viewModel>/ordresExistants' }
+                                                    ],
+                                                    formatter: '.formatOrdreTooltip'
+                                                }"
+                                                size="1rem"
+                                                class="sapUiTinyMarginEnd" />
+                                            <Text id="txtAnlage" text="{ANLAGE}" wrapping="false" />
+                                        </HBox>
+
+                                        <Text id="txtTermschl"  text="{Termschl}"                                         wrapping="false" />
+                                        <Text id="txtTermtdat"  text="{path: 'Termtdat', formatter: '.formatDate'}"        wrapping="false" />
+                                        <Text id="txtAdatsoll"  text="{path: 'Adatsoll', formatter: '.formatDate'}"        wrapping="false" />
+                                        <Text id="txtAblesgr"   text="{Ablesgr}"                                           wrapping="false" />
+                                        <Text id="txtAblesart"  text="{Ablesart}"                                          wrapping="false" />
+                                        <Text id="txtEstinbill" text="{Estinbill}"                                         wrapping="false" />
+
+                                        <ObjectStatus id="osStatut"
+                                            text="{
+                                                parts: [
+                                                    { path: 'ANLAGE' },
+                                                    { path: 'Adatsoll' },
+                                                    { path: 'viewModel>/ordresExistants' }
+                                                ],
+                                                formatter: '.formatOrdreLabel'
+                                            }"
+                                            state="{
+                                                parts: [
+                                                    { path: 'ANLAGE' },
+                                                    { path: 'Adatsoll' },
+                                                    { path: 'viewModel>/ordresExistants' }
+                                                ],
+                                                formatter: '.formatOrdreState'
+                                            }"
+                                            icon="{
+                                                parts: [
+                                                    { path: 'ANLAGE' },
+                                                    { path: 'Adatsoll' },
+                                                    { path: 'viewModel>/ordresExistants' }
+                                                ],
+                                                formatter: '.formatOrdreIcon'
+                                            }"
+                                            inverted="false" />
+
+                                    </cells>
+                                </ColumnListItem>
+                            </items>
+
+                        </Table>
+
+                        <MessageStrip
+                            id="stripSelectedRow"
+                            text="{viewModel>/selectedRowInfo}"
+                            type="Information"
+                            showIcon="true"
+                            showCloseButton="false"
+                            visible="{= !!${viewModel>/selectedRowInfo} }"
+                            class="sapUiSmallMarginTop" />
+
+                    </content>
+                </Panel>
+
+            </VBox>
+        </content>
+    </Page>
+</mvc:View>

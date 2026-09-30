@@ -1,0 +1,273 @@
+<mvc:View
+    controllerName="project2.controller.ordre_de_calcul"
+    xmlns:mvc="sap.ui.core.mvc"
+    xmlns="sap.m"
+    xmlns:f="sap.f"
+    xmlns:fb="sap.ui.comp.filterbar"
+    xmlns:core="sap.ui.core"
+    displayBlock="true">
+
+    <Page id="OC_page"
+          showNavButton="true"
+          navButtonPress=".onNavBack"
+          enableScrolling="false">
+
+        <customHeader>
+            <Bar id="OC_bar">
+                <contentLeft>
+                    <Button id="OC_btnNavBack"
+                            icon="sap-icon://nav-back"
+                            press=".onNavBack"
+                            type="Transparent" />
+                    <Title id="_IDGenTitle"
+                           text="Ordres de calcul de facturation"
+                           level="H5" />
+                </contentLeft>
+                <contentRight>
+                    <Button
+                        id="OC_btnAfficherDoc"
+                        text="Afficher document"
+                        icon="sap-icon://document-text"
+                        press=".onAfficherDocument"
+                        type="Ghost" />
+                    <Button id="OC_btnExcel"
+                        icon="sap-icon://excel-attachment"
+                        text="Excel"
+                        press=".onExportExcel"
+                        type="Ghost" />
+                    <Button id="OC_btnRefresh"
+                        icon="sap-icon://refresh"
+                        text="Actualiser"
+                        press=".onRefresh"
+                        type="Ghost" />
+                </contentRight>
+            </Bar>
+        </customHeader>
+
+        <content>
+            <f:DynamicPage
+                id="dynamicPage"
+                headerExpanded="true"
+                toggleHeaderOnTitleClick="false"
+                fitContent="false">
+
+                <f:title>
+                    <f:DynamicPageTitle id="OC_dynTitle">
+                        <f:expandedContent>
+                            <Label id="expandedLabel" text="Aucun filtre actif" />
+                        </f:expandedContent>
+                        <f:snappedContent>
+                            <Label id="snappedLabel" text="Aucun filtre actif" />
+                        </f:snappedContent>
+                    </f:DynamicPageTitle>
+                </f:title>
+
+                <f:header>
+                    <f:DynamicPageHeader id="OC_dynHeader" pinnable="true">
+                        <f:content>
+                            <fb:FilterBar
+                                id="filterbar"
+                                persistencyKey="OrdreCalculFilterKey"
+                                useToolbar="false"
+                                showGoOnFB="true"
+                                search=".onSearch"
+                                filterChange=".onFilterChange">
+
+                                <fb:filterGroupItems>
+
+                                    <fb:FilterGroupItem
+                                        id="OC_fgiAnlage"
+                                        name="Anlage"
+                                        label="Installation"
+                                        groupName="G1"
+                                        visibleInFilterBar="true"
+                                        mandatory="false">
+                                        <fb:control>
+                                            <Input id="fAnlage" placeholder="ex. 4000000280"
+                                                submit=".onSearch" liveChange=".onFilterChange" />
+                                        </fb:control>
+                                    </fb:FilterGroupItem>
+
+                                    <fb:FilterGroupItem
+                                        id="OC_fgiVkonto"
+                                        name="Vkonto"
+                                        label="Compte Contrat"
+                                        groupName="G1"
+                                        visibleInFilterBar="true">
+                                        <fb:control>
+                                            <Input id="fVkonto" placeholder="ex. 000210000566"
+                                                submit=".onSearch" liveChange=".onFilterChange" />
+                                        </fb:control>
+                                    </fb:FilterGroupItem>
+
+                                    <fb:FilterGroupItem
+                                        id="OC_fgiBukrs"
+                                        name="Bukrs"
+                                        label="Société"
+                                        groupName="G1"
+                                        visibleInFilterBar="false">
+                                        <fb:control>
+                                            <Input id="fBukrs" placeholder="ex. STEG"
+                                                submit=".onSearch" liveChange=".onFilterChange" />
+                                        </fb:control>
+                                    </fb:FilterGroupItem>
+
+                                    <fb:FilterGroupItem
+                                        id="OC_fgiTrigstat"
+                                        name="Trigstat"
+                                        label="Statut"
+                                        groupName="G1"
+                                        visibleInFilterBar="true">
+                                        <fb:control>
+                                            <Select id="fTrigstat" forceSelection="false" change=".onFilterChange">
+                                                <core:Item id="_IDGenItem"  key=""  text="(Tous)" />
+                                                <core:Item id="_IDGenItem2" key="2" text="Prêt" />
+                                                <core:Item id="_IDGenItem1" key="1" text="Erreur" />
+                                            </Select>
+                                        </fb:control>
+                                    </fb:FilterGroupItem>
+
+                                    <fb:FilterGroupItem
+                                        id="OC_fgiDate"
+                                        name="Adatsoll"
+                                        label="Date Relève Plan."
+                                        groupName="G1"
+                                        visibleInFilterBar="true">
+                                        <fb:control>
+                                            <DateRangeSelection id="fDateRange"
+                                                displayFormat="dd/MM/yyyy"
+                                                change=".onFilterChange" />
+                                        </fb:control>
+                                    </fb:FilterGroupItem>
+
+                                    <fb:FilterGroupItem
+                                        id="OC_fgiPortion"
+                                        name="Portion"
+                                        label="Portion"
+                                        groupName="G1"
+                                        visibleInFilterBar="false">
+                                        <fb:control>
+                                            <Input id="fPortion" placeholder="ex. POREM01"
+                                                submit=".onSearch" liveChange=".onFilterChange" />
+                                        </fb:control>
+                                    </fb:FilterGroupItem>
+
+                                    <fb:FilterGroupItem
+                                        id="OC_fgiAbleinh"
+                                        name="Ableinh"
+                                        label="Unité Relevé"
+                                        groupName="G1"
+                                        visibleInFilterBar="false">
+                                        <fb:control>
+                                            <Input id="fAbleinh" placeholder="ex. OAA0101"
+                                                submit=".onSearch" liveChange=".onFilterChange" />
+                                        </fb:control>
+                                    </fb:FilterGroupItem>
+
+                                </fb:filterGroupItems>
+                            </fb:FilterBar>
+                        </f:content>
+                    </f:DynamicPageHeader>
+                </f:header>
+
+                <f:content>
+                    <Table
+                        id="ordreCalculTable"
+                        inset="false"
+                        mode="MultiSelect"
+                        items="{
+                            path: '/ordresdeCalculSet',
+                            parameters: {
+                                select: 'Anlage,Vkonto,Bukrs,Sparte,Portion,Erdat,Adatsoll,Abrdats,Ableinh,Trigstat'
+                            },
+                            events: {
+                                dataReceived: '.onDataReceived'
+                            }
+                        }"
+                        noDataText="Aucun ordre de calcul trouvé"
+                        growing="true"
+                        growingThreshold="20"
+                        growingScrollToLoad="true"
+                        busy="{viewModel>/busy}"
+                        alternateRowColors="true"
+                        selectionChange=".onSelectionChange"
+                        updateFinished=".onUpdateFinished">
+
+                        <headerToolbar>
+                            <OverflowToolbar id="OC_toolbar">
+                                <Title id="tableTitle" text="Ordres Facturation" level="H3" />
+                                <ToolbarSpacer id="_IDGenToolbarSpacer" />
+                                <Button
+                                    id="OC_btnCancelSelection"
+                                    text="{= ${viewModel>/selectedCount} + ' sélectionné(s)'}"
+                                    icon="sap-icon://decline"
+                                    press=".onCancelSelection"
+                                    visible="{= ${viewModel>/selectedCount} > 0}"
+                                    type="Transparent" />
+                                <Button
+                                    id="OC_btnTraiter"
+                                    text="Reprise Facturation"
+                                    icon="sap-icon://add-document"
+                                    press=".onTraiter"
+                                    visible="{= ${viewModel>/selectedCount} > 0}"
+                                    type="Emphasized" />
+                                <ToolbarSeparator id="OC_toolbarSep"
+                                    visible="{= ${viewModel>/selectedCount} > 0}" />
+                            </OverflowToolbar>
+                        </headerToolbar>
+
+                        <columns>
+                            <Column id="OC_col0" width="9rem">
+                                <Text id="_IDGenText3" text="Installation" />
+                            </Column>
+                            <Column id="OC_col1" minScreenWidth="Tablet" demandPopin="true">
+                                <Text id="_IDGenText9" text="Compte Contrat" />
+                            </Column>
+                            <Column id="OC_col2" minScreenWidth="Tablet" demandPopin="true" width="6rem">
+                                <Text id="_IDGenText10" text="Société" />
+                            </Column>
+                            <Column id="OC_col4" minScreenWidth="Large" demandPopin="true">
+                                <Text id="_IDGenText12" text="Portion" />
+                            </Column>
+                            <Column id="OC_col5" minScreenWidth="Tablet" demandPopin="true">
+                                <Text id="_IDGenText13" text="Date Création" />
+                            </Column>
+                            <Column id="OC_col6" minScreenWidth="Tablet" demandPopin="true">
+                                <Text id="_IDGenText14" text="Date Relève Plan." />
+                            </Column>
+                            <Column id="OC_col8" minScreenWidth="Large" demandPopin="true">
+                                <Text id="_IDGenText16" text="Unité Relevé" />
+                            </Column>
+                            <Column id="OC_col9" minScreenWidth="Tablet" demandPopin="true" hAlign="Center" width="8rem">
+                                <Text id="_IDGenText17" text="Statut" />
+                            </Column>
+                        </columns>
+
+                        <items>
+                            <ColumnListItem id="OC_row" type="Navigation" press=".onRowPress">
+                                <cells>
+                                    <ObjectIdentifier id="_IDGenObjectIdentifier" title="{Anlage}" />
+                                    <Text id="_IDGenText18" text="{Vkonto}" />
+                                    <Text id="_IDGenText19" text="{Bukrs}" />
+                                    <Text id="_IDGenText21" text="{Portion}" />
+                                    <Text id="_IDGenText22" text="{path: 'Erdat',    formatter: '.formatDate'}" />
+                                    <Text id="_IDGenText23" text="{path: 'Adatsoll', formatter: '.formatDate'}" />
+                                    <Text id="_IDGenText25" text="{Ableinh}" />
+                                    <ObjectStatus id="_IDGenObjectStatus2"
+                                        text="{path: 'Trigstat', formatter: '.formatStatutText'}"
+                                        state="{path: 'Trigstat', formatter: '.formatStatutState'}"
+                                        icon="{path: 'Trigstat', formatter: '.formatStatutIcon'}"
+                                        inverted="true" />
+                                </cells>
+                            </ColumnListItem>
+                        </items>
+
+                    </Table>
+                </f:content>
+
+            </f:DynamicPage>
+        </content>
+
+    </Page>
+
+</mvc:View>

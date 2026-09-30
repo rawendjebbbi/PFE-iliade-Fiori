@@ -1,0 +1,203 @@
+<mvc:View
+  controllerName="project2.controller.saisiereleve"
+  xmlns:mvc="sap.ui.core.mvc"
+  xmlns="sap.m"
+  xmlns:f="sap.ui.layout.form"
+  xmlns:core="sap.ui.core"
+  displayBlock="true">
+  <Page id="pageReleve" title="Saisie de Relevé">
+    <content>
+      <VBox id="vboxMain" class="sapUiSmallMargin">
+
+        <Panel id="panelRecherche"
+          headerText="Critères de recherche"
+          expandable="true"
+          expanded="true">
+          <content>
+            <f:Form id="formRecherche" editable="true" class="sapUiSmallMarginTop">
+              <f:layout>
+                <f:ResponsiveGridLayout id="rglRecherche"
+                  columnsXL="1" columnsL="1" columnsM="1"
+                  labelSpanXL="3" labelSpanL="3" labelSpanM="4" labelSpanS="12"
+                  adjustLabelSpan="false"
+                  singleContainerFullSize="false"/>
+              </f:layout>
+              <f:formContainers>
+                <f:FormContainer id="fcRecherche">
+                  <f:formElements>
+                    <f:FormElement id="feanlage" label="Installation">
+                      <f:fields>
+                        <Input id="inputanlage"
+                          placeholder="N° installation"
+                          value="{viewModel>/searchanlage}"
+                          width="250px"
+                          submit=".onSearch"/>
+                      </f:fields>
+                    </f:FormElement>
+                  </f:formElements>
+                </f:FormContainer>
+              </f:formContainers>
+            </f:Form>
+          </content>
+        </Panel>
+
+        <Toolbar id="toolbarRecherche" class="sapUiSmallMarginTop">
+          <Button id="btnSearch"
+            text="Rechercher"
+            type="Emphasized"
+            icon="sap-icon://search"
+            press=".onSearch"/>
+          <Button id="btnReset0"
+            text="Réinitialiser"
+            type="Default"
+            icon="sap-icon://sys-cancel"
+            press=".onReset"
+            class="sapUiSmallMarginBegin"/>
+        </Toolbar>
+
+        <Panel id="panelTable" expandable="true" expanded="true" class="sapUiSmallMarginTop">
+          <headerToolbar>
+            <OverflowToolbar id="toolbarTable">
+              <Title id="titleTable" text="Ordres de relevé non saisis" level="H2"/>
+              <ToolbarSpacer id="spacerTable1"/>
+              <BusyIndicator id="busySearch" visible="{viewModel>/busy}"/>
+            </OverflowToolbar>
+          </headerToolbar>
+          <content>
+            <Table id="ordersTable"
+              items="{viewModel>/groupedOrdres}"
+              noDataText="Aucun ordre — lancez une recherche"
+              growing="true"
+              growingThreshold="15"
+              sticky="ColumnHeaders"
+              alternateRowColors="true"
+              class="sapUiSmallMarginTop">
+              <columns>
+                <Column id="_IDGenColumn14" width="12rem"><Text id="_IDGenText53" text="Lieu de conso"/></Column>
+                <Column id="_IDGenColumn15" width="10rem"><Text id="_IDGenText68" text="Installation"  /></Column>
+                <Column id="_IDGenColumn16" width="10rem"><Text id="_IDGenText69" text="Appareil"      /></Column>
+                <Column id="_IDGenColumn17" width="10rem"><Text id="_IDGenText70" text="Équipement"    /></Column>
+                <Column id="_IDGenColumn18" width="9rem" ><Text id="_IDGenText71" text="Dte Rel Plan"  /></Column>
+                <Column id="_IDGenColumn19" width="10rem"><Text id="_IDGenText72" text="Cadrans"       /></Column>
+              </columns>
+              <items>
+                <ColumnListItem id="_IDGenColumnListItem2" type="Active" press=".onRowPress">
+                  <cells>
+                    <Text id="_IDGenText74" text="{viewModel>VSTELLE}"     wrapping="false"/>
+                    <Text id="_IDGenText75" text="{viewModel>anlage}"      wrapping="false"/>
+                    <Text id="_IDGenText76" text="{path:'viewModel>Gernr', formatter:'.formatLeadingZeros'}" wrapping="false"/>
+                    <Text id="_IDGenText77" text="{path:'viewModel>Equnr', formatter:'.formatLeadingZeros'}" wrapping="false"/>
+                    <Text id="_IDGenText78" text="{path:'viewModel>Adatsoll', formatter:'.formatSapDate'}"   wrapping="false"/>
+                    <Text id="_IDGenText79" text="{viewModel>cadransLabel}" wrapping="false"/>
+                  </cells>
+                </ColumnListItem>
+              </items>
+            </Table>
+          </content>
+        </Panel>
+
+      </VBox>
+    </content>
+
+    <dependents>
+      <Dialog id="dialogSaisie"
+        title="Saisie — {viewModel>/currentGroupe/VSTELLE}"
+        resizable="true" draggable="true" contentWidth="860px">
+
+        <content>
+          <VBox id="_IDGenVBox1" class="sapUiSmallMargin">
+
+            <f:SimpleForm id="_IDGenSimpleForm1" editable="false"
+              layout="ResponsiveGridLayout"
+              labelSpanXL="4" labelSpanL="4" labelSpanM="4" labelSpanS="12"
+              columnsXL="2" columnsL="2" columnsM="2">
+              <f:content>
+                <core:Title id="_IDGenTitle5" text="Informations de l'ordre"/>
+                <Label id="_IDGenLabel17" text="Lieu de conso"/><Text id="_IDGenText80" text="{viewModel>/currentGroupe/VSTELLE}"/>
+                <Label id="_IDGenLabel21" text="Installation"  /><Text id="_IDGenText81" text="{viewModel>/currentGroupe/anlage}"/>
+                <Label id="_IDGenLabel22" text="Appareil"      /><Text id="_IDGenText82" text="{path:'viewModel>/currentGroupe/Gernr', formatter:'.formatLeadingZeros'}"/>
+                <Label id="_IDGenLabel23" text="Équipement"    /><Text id="_IDGenText83" text="{path:'viewModel>/currentGroupe/Equnr', formatter:'.formatLeadingZeros'}"/>
+                <Label id="_IDGenLabel24" text="Dte Rel Plan"  /><Text id="_IDGenText84" text="{path:'viewModel>/currentGroupe/Adatsoll', formatter:'.formatSapDate'}"/>
+              </f:content>
+            </f:SimpleForm>
+
+            <Title id="_IDGenTitle7" text="Saisie par cadran" class="sapUiSmallMarginTop sapUiSmallMarginBegin" level="H3"/>
+
+            <Table id="tableCadrans"
+              items="{viewModel>/currentGroupe/cadrans}"
+              alternateRowColors="true"
+              showSeparators="Inner"
+              class="sapUiTinyMarginTop">
+              <columns>
+                <Column id="_IDGenColumn21" width="5rem"  hAlign="Center"><Text id="_IDGenText85" text="Cadran"        /></Column>
+                <Column id="_IDGenColumn22" width="8rem"  hAlign="End"   ><Text id="_IDGenText86" text="Index préc."   /></Column>
+                <Column id="_IDGenColumn23" width="11rem"                ><Text id="_IDGenText87" text="Index relevé *"/></Column>
+                <Column id="_IDGenColumn24" width="9rem"  hAlign="End"   ><Text id="_IDGenText88" text="Consommation"  /></Column>
+                <Column id="_IDGenColumn25" width="6rem"  hAlign="Center"><Text id="_IDGenText91" text="Unité"         /></Column>
+                <Column id="_IDGenColumn26" width="11rem"                ><Text id="_IDGenText92" text="Date relevé Planifiée"   /></Column>
+              </columns>
+              <items>
+                <ColumnListItem id="_IDGenColumnListItem3">
+                  <cells>
+
+                    <Text id="_IDGenText89" text="{viewModel>Zwnummer}" wrapping="false"/>
+
+                    <Text id="_IDGenText90"
+                      text="{
+                        parts: [
+                          {path: 'viewModel>dernierindex'},
+                          {path: 'viewModel>denierindexapv'}
+                        ],
+                        formatter: '.formatDernierIndex'
+                      }"
+                      wrapping="false"/>
+
+                    <Input id="_IDGenInput"
+                      placeholder=" "
+                      value="{viewModel>IndexReleve}"
+                      valueState="{viewModel>IndexState}"
+                      valueStateText="Index obligatoire"
+                      change=".onCadranIndexChange"/>
+
+                    <ObjectStatus id="_IDGenObjectStatus3"
+                      text="{viewModel>Consommation}"
+                      state="{viewModel>ConsoState}"/>
+
+                    <Text id="_IDGenText93" text="{viewModel>Massread}" wrapping="false"/>
+
+                    <DatePicker id="_IDGenDatePicker"
+                      value="{viewModel>DateReleve}"
+                      valueFormat="yyyy-MM-dd"
+                      displayFormat="dd/MM/yyyy"
+                      valueState="{viewModel>DateState}"
+                      valueStateText="Date obligatoire"/>
+
+                  </cells>
+                </ColumnListItem>
+              </items>
+            </Table>
+
+          </VBox>
+        </content>
+
+        <buttons>
+          <Button id="btnValider"
+            text="Valider tout"
+            icon="sap-icon://accept"
+            type="Emphasized"
+            press=".onValiderSaisie"/>
+          <Button id="btnAnnuler"
+            text="Annuler"
+            icon="sap-icon://cancel"
+            press=".onCancelSaisie"/>
+          <Button id="btnEstimer"
+            text="Estimer"
+            icon="sap-icon://hint"
+            type="Emphasized"
+            press=".onEstimerIndex"/>
+        </buttons>
+      </Dialog>
+    </dependents>
+
+  </Page>
+</mvc:View>
